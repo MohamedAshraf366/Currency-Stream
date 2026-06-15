@@ -88,13 +88,8 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"
-<<<<<<< HEAD
   },
   "engines": {
     "node": ">=20"
   }
 }
-=======
-  }
-}
->>>>>>> 694c15ebf614ea7ea91a0307d8e6aecc73be1613
