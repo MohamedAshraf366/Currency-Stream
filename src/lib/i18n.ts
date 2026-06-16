@@ -32,24 +32,24 @@ const resources = {
   },
 };
 
+// Detect stored or browser language (client only)
+function detectLang(): string {
+  if (typeof window === "undefined") return "en";
+  try {
+    const stored = window.localStorage.getItem("i18nextLng");
+    if (stored && ["en", "ar"].includes(stored)) return stored;
+  } catch {}
+  return navigator.language?.startsWith("ar") ? "ar" : "en";
+}
+
 if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources,
-    lng: "en",
+    lng: detectLang(),
     fallbackLng: "en",
     supportedLngs: ["en", "ar"],
     interpolation: { escapeValue: false },
   });
-}
-
-// Apply stored language on the client after hydration to avoid SSR mismatches.
-if (typeof window !== "undefined") {
-  const stored = window.localStorage.getItem("i18nextLng");
-  const initial = stored && ["en", "ar"].includes(stored) ? stored : (navigator.language?.startsWith("ar") ? "ar" : "en");
-  if (initial !== i18n.language) {
-    // Defer until after first paint/hydration
-    queueMicrotask(() => i18n.changeLanguage(initial));
-  }
 }
 
 export default i18n;

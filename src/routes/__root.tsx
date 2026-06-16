@@ -4,11 +4,11 @@ import {
   HeadContent, Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { I18nextProvider, useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import "../lib/i18n";
-import { useTranslation } from "react-i18next";
+import i18n from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -53,10 +53,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-     links: [
-    { rel: "stylesheet", href: appCss },
-    { rel: "icon", type: "image/png", href: "/logo.png" },
-  ],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: "/logo.png" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -85,9 +85,11 @@ function I18nDirSync() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
-    <QueryClientProvider client={queryClient}>
-      <I18nDirSync />
-      <Outlet />
-    </QueryClientProvider>
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>
+        <I18nDirSync />
+        <Outlet />
+      </QueryClientProvider>
+    </I18nextProvider>
   );
 }
